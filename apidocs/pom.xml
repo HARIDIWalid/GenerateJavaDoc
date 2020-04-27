@@ -1,0 +1,163 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>apidocs</artifactId>
+
+	<name>===} SmartHR4You API Docs {===</name>
+	<description>Generates the site with the JavaDoc and the JSDoc</description>
+
+	<scm>
+		<connection>scm:git:${git.base.url}/GenerateJavaDoc.git</connection>
+		<url>${git.base.url}/projects/GenerateJavaDoc/browse</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Walid HARIDI</name>
+			<email>w.haridi@gmail.com</email>
+			<organization>Sopra HR Software</organization>
+		</developer>
+	</developers>
+
+	<profiles>
+		<profile>
+			<id>deploy-dev-mode</id> <!-- DEV MODE-->
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>zip</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<appendAssemblyId>false</appendAssemblyId>
+									<descriptors>
+										<descriptor>src/main/assembly/zip.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
+			<reporting>
+				<plugins>
+
+					<!-- Maven site configuration -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-project-info-reports-plugin</artifactId>
+						<version>2.7</version>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>index</report>
+									<report>dependencies</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+
+					<!-- JSDoc configuration -->
+					<plugin>
+						<groupId>com.phasebash.jsdoc</groupId>
+						<artifactId>jsdoc3-maven-plugin</artifactId>
+						<version>1.1.0</version>
+						<configuration>
+							<recursive>true</recursive>
+							<directoryRoots>
+								<directoryRoot>../Generate-java-doc/src/main/resources/webapp/js</directoryRoot>
+							</directoryRoots>
+							<outputDirectory>${baseDir}</outputDirectory>
+							<finalName>SmartHR4You-jsdoc</finalName>
+						</configuration>
+					</plugin>
+
+					<!-- JavaDoc configuration -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.2.0</version>
+						<reportSets>
+							<reportSet>
+								<!-- <inherited>false</inherited> -->
+								<reports>
+									<report>aggregate</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+							<additionalJOption>-Xdoclint:none</additionalJOption>
+							<doclint>none</doclint>
+							<recursive>true</recursive>
+							<sourcepath>
+								../Generate-java-doc:
+							</sourcepath>
+							<outputDirectory>${baseDir}</outputDirectory>
+							<finalName>Generate-javadoc</finalName>
+							<detectLinks>true</detectLinks>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+
+		</profile>
+	</profiles>
+
+	<!-- Pour activer le dépoiement vers le dépôt Nexus -->
+	<!-- <distributionManagement>
+		<snapshotRepository>
+			<id>gt-snapshots</id>
+			<name>GT Snapshots</name>
+			<url>${nexus.base.url}/content/repositories/gt-snapshots</url>
+			<layout>default</layout>
+			<uniqueVersion>true</uniqueVersion>
+		</snapshotRepository>
+		<repository>
+			<id>gt-releases</id>
+			<name>GT Releases</name>
+			<url>${nexus.base.url}/content/repositories/gt-releases</url>
+			<layout>default</layout>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+	</distributionManagement> -->
+
+	<!-- <repositories>
+		<repository>
+			<id>hra-nexus-public</id>
+			<url>https://repo.soprahr.com/nexus/content/repositories/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>gt-snapshots</id>
+			<name>GT Snapshots</name>
+			<url>${nexus.base.url}/content/repositories/gt-snapshots</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>false</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories> -->
+</project>

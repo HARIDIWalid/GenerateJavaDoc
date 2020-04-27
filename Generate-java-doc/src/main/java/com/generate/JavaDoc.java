@@ -14,7 +14,7 @@ public class JavaDoc {
 	 * @param {@link Number} numberOfWeek
 	 * @return {@link String} numberOfWeek to String format
 	 */
-	public String updateDay(int numberOfWeek) throws Exception {
+	public String updateDay (int numberOfWeek) throws Exception {
 		return "" + numberOfWeek;
 	}
 }
